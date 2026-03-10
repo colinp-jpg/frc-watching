@@ -1,4 +1,4 @@
-const CACHE_NAME = 'frc-videos-v1';
+const CACHE_NAME = 'tba-hub-v2';
 const urlsToCache = [
   './',
   './index.html',
