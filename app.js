@@ -167,7 +167,24 @@ async function loadMatches() {
         const matches = await response.json();
         if (!matches || matches.length === 0) throw new Error('No matches found');
         
-        allMatches = matches.sort((a, b) => a.match_number - b.match_number);
+        // Sort by video upload date (most recent first), fallback to match number
+        allMatches = matches.sort((a, b) => {
+            // Get the latest video upload time for each match
+            const aTime = a.videos && a.videos.length > 0 ? 
+                Math.max(...a.videos.map(v => new Date(v.uploaded_at || 0).getTime())) : 0;
+            const bTime = b.videos && b.videos.length > 0 ? 
+                Math.max(...b.videos.map(v => new Date(v.uploaded_at || 0).getTime())) : 0;
+            
+            // If both have videos, sort by upload time (newest first)
+            if (aTime && bTime) return bTime - aTime;
+            
+            // Videos come before non-videos
+            if (aTime && !bTime) return -1;
+            if (!aTime && bTime) return 1;
+            
+            // If neither have videos, sort by match number
+            return a.match_number - b.match_number;
+        });
         displayMatches();
         updateStats();
         
