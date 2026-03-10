@@ -410,12 +410,13 @@ select:focus {
 }
 
 .player-layout {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    gap: 10px;
     flex: 1;
     overflow: hidden;
     padding: 10px;
+    align-items: center;
 }
 
 .video-header {
@@ -1233,7 +1234,20 @@ select:focus {
         flex-wrap: wrap;
     }
     
+    /* Hide sidebars and breakdown on mobile */
+    .alliance-stats,
+    .match-breakdown-container {
+        display: none !important;
+    }
+    
     /* Full screen video player on mobile */
+    .player-layout {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0;
+    }
+    
     .video-player {
         padding: 0;
     }
@@ -1244,10 +1258,6 @@ select:focus {
     
     .video-header h2 {
         font-size: 1em;
-    }
-    
-    .player-layout {
-        padding: 0;
     }
     
     .video-container {
