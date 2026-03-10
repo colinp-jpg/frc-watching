@@ -248,6 +248,10 @@ function openVideoPlayer(match) {
     elements.currentMatchTitle.textContent = getMatchName(match);
     elements.videoPlayer.style.display = 'block';
     document.body.style.overflow = 'hidden';
+    
+    // Lock screen orientation to landscape on mobile
+    lockOrientation();
+    
     loadVideo(false);
     displayMatchDetails();
 }
@@ -255,6 +259,10 @@ function openVideoPlayer(match) {
 function closeVideoPlayer() {
     elements.videoPlayer.style.display = 'none';
     document.body.style.overflow = 'auto';
+    
+    // Unlock screen orientation
+    unlockOrientation();
+    
     if (ytPlayer) {
         ytPlayer.destroy();
         ytPlayer = null;
@@ -845,6 +853,31 @@ function formatTeamNumber(teamKey) { return teamKey.replace('frc', 'Team '); }
 function showLoading(show) { elements.loading.style.display = show ? 'block' : 'none'; }
 function showError(message) { elements.error.textContent = message; elements.error.style.display = 'block'; }
 function hideError() { elements.error.style.display = 'none'; }
+
+// Screen orientation lock functions for mobile
+function lockOrientation() {
+    try {
+        // Try the Screen Orientation API (supported on most modern mobile browsers)
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape').catch(err => {
+                console.log('Orientation lock not supported or failed:', err);
+            });
+        }
+    } catch (err) {
+        console.log('Screen orientation API not available:', err);
+    }
+}
+
+function unlockOrientation() {
+    try {
+        if (screen.orientation && screen.orientation.unlock) {
+            screen.orientation.unlock();
+        }
+    } catch (err) {
+        console.log('Screen orientation unlock failed:', err);
+    }
+}
+
 // Register service worker for PWA functionality
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

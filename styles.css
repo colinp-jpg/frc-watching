@@ -1221,6 +1221,58 @@ select:focus {
     font-size: 1.1em;
 }
 
+/* Landscape orientation message for mobile */
+.rotate-message {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg);
+    z-index: 10000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.rotate-message svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    animation: rotate 2s infinite ease-in-out;
+}
+
+@keyframes rotate {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(90deg); }
+}
+
+.rotate-message h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: var(--text);
+}
+
+.rotate-message p {
+    color: var(--text-light);
+    font-size: 1.1em;
+}
+
+/* Show rotation message in portrait mode on mobile */
+@media (max-width: 768px) and (orientation: portrait) {
+    .video-player .rotate-message {
+        display: flex !important;
+    }
+    
+    .video-player .player-layout,
+    .video-player .video-controls {
+        display: none !important;
+    }
+}
+
 @media (max-width: 768px) {
     header h1 {
         font-size: 2em;

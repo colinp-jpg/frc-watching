@@ -17,6 +17,10 @@
     <meta name="apple-mobile-web-app-title" content="FRC Videos">
     <link rel="apple-touch-icon" href="icon-192.png">
     
+    <!-- Force landscape orientation on mobile -->
+    <meta name="screen-orientation" content="landscape">
+    <meta name="x5-orientation" content="landscape">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="icon-192.png">
     
@@ -96,6 +100,13 @@
         <div id="matchList" class="match-list"></div>
 
         <div id="videoPlayer" class="video-player" style="display: none;">
+            <div class="rotate-message">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: #3b82f6;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <h2>Please Rotate Your Device</h2>
+                <p>This app works best in landscape mode</p>
+            </div>
             <div class="video-header">
                 <h2 id="currentMatchTitle"></h2>
                 <button id="closePlayer" class="btn-close">✕</button>
