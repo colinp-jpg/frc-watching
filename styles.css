@@ -410,13 +410,12 @@ select:focus {
 }
 
 .player-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr 280px;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     flex: 1;
     overflow: hidden;
     padding: 10px;
-    align-items: center;
 }
 
 .video-header {
@@ -1231,6 +1230,44 @@ select:focus {
     }
     
     .video-controls {
-        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    
+    /* Full screen video player on mobile */
+    .video-player {
+        padding: 0;
+    }
+    
+    .video-header {
+        padding: 10px;
+    }
+    
+    .video-header h2 {
+        font-size: 1em;
+    }
+    
+    .player-layout {
+        padding: 0;
+    }
+    
+    .video-container {
+        max-height: 100vh;
+        border-radius: 0;
+    }
+    
+    .btn-close {
+        width: 36px;
+        height: 36px;
+        font-size: 1.2em;
+    }
+    
+    .video-controls {
+        margin: 5px;
+        padding: 8px;
+    }
+    
+    .btn-nav {
+        padding: 10px 20px;
+        font-size: 0.95em;
     }
 }
