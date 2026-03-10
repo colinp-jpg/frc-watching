@@ -2,6 +2,9 @@
 const TBA_API_BASE = 'https://www.thebluealliance.com/api/v3';
 const STATBOTICS_API_BASE = 'https://api.statbotics.io/v3';
 
+// Default API key - replace with your TBA API key
+const DEFAULT_API_KEY = 'YOUR_API_KEY_HERE';
+
 // Global state
 let allMatches = [];
 let filteredMatches = [];
@@ -9,7 +12,7 @@ let currentMatch = null;
 let currentMatchIndex = 0;
 let currentVideoIndex = 0;
 let ytPlayer = null;
-let apiKey = localStorage.getItem('tba_api_key') || '';
+let apiKey = localStorage.getItem('tba_api_key') || DEFAULT_API_KEY;
 let eventKey = localStorage.getItem('tba_event_key') || '';
 let fmaEvents = [];
 let selectedYear = localStorage.getItem('tba_selected_year') || '2026';
