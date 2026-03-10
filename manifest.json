@@ -1,6 +1,6 @@
 {
-  "name": "FRC Match Videos",
-  "short_name": "FRC Videos",
+  "name": "TBA Video Hub",
+  "short_name": "TBA Hub",
   "description": "Watch FRC match videos from The Blue Alliance with an improved interface",
   "start_url": "./",
   "scope": "./",
