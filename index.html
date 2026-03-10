@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRC Match Videos - The Blue Alliance</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Theme colors -->
+    <meta name="theme-color" content="#0066cc">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- iOS specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="FRC Videos">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="icon-192.png">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎥 FRC Match Videos</h1>
+            <p>Watch videos from The Blue Alliance with an improved interface</p>
+        </header>
+
+        <div class="search-section">
+            <div class="input-group year-selector">
+                <label for="yearSelect">Year:</label>
+                <div class="year-group">
+                    <select id="yearSelect">
+                        <option value="2026">2026</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                    <button id="loadEvents" class="btn-secondary">Load FMA Events</button>
+                </div>
+            </div>
+            
+            <div class="input-group" id="eventSelectorGroup" style="display: none;">
+                <label for="eventSelect">Select FMA Event:</label>
+                <select id="eventSelect">
+                    <option value="">-- Select an event --</option>
+                </select>
+                <small id="eventCount"></small>
+            </div>
+            
+            <div class="input-group">
+                <label for="eventKey">Or Enter Event Key Manually:</label>
+                <input type="text" id="eventKey" placeholder="e.g., 2024cmptx" />
+                <small>Find event keys on <a href="https://www.thebluealliance.com/events" target="_blank">The Blue Alliance</a></small>
+            </div>
+            
+            <div class="input-group">
+                <label for="apiKey">TBA API Key:</label>
+                <input type="password" id="apiKey" placeholder="Your API key" />
+                <small>Get your key from <a href="https://www.thebluealliance.com/account" target="_blank">TBA Account Settings</a></small>
+            </div>
+            
+            <button id="loadMatches" class="btn-primary">Load Matches</button>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading matches...</p>
+        </div>
+
+        <div id="error" class="error" style="display: none;"></div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <span id="matchCount"></span>
+            <span id="videoCount"></span>
+        </div>
+
+        <div class="filters" id="filters" style="display: none;">
+            <label>
+                <input type="checkbox" id="videoFilter" checked>
+                Only show matches with videos
+            </label>
+            <select id="matchType">
+                <option value="all">All Match Types</option>
+                <option value="qm">Qualification Matches</option>
+                <option value="qf">Quarter Finals</option>
+                <option value="sf">Semi Finals</option>
+                <option value="f">Finals</option>
+            </select>
+        </div>
+
+        <div id="matchList" class="match-list"></div>
+
+        <div id="videoPlayer" class="video-player" style="display: none;">
+            <div class="video-header">
+                <h2 id="currentMatchTitle"></h2>
+                <button id="closePlayer" class="btn-close">✕</button>
+            </div>
+            <div class="player-layout">
+                <div class="alliance-stats red-stats" id="redStats"></div>
+                <div class="center-video">
+                    <div class="video-container">
+                        <div id="youtubePlayer"></div>
+                        <div id="videoError" class="video-error" style="display: none;">
+                            <h3>⚠️ Video Cannot Be Embedded</h3>
+                            <p>This video's owner has disabled embedding.</p>
+                            <a id="watchOnYouTube" class="btn-youtube" href="" target="_blank">Watch on YouTube</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="alliance-stats blue-stats" id="blueStats"></div>
+            </div>
+            <div class="video-controls">
+                <button id="prevVideo" class="btn-nav">← Previous</button>
+                <span id="videoCounter"></span>
+                <button id="nextVideo" class="btn-nav">Next →</button>
+            </div>
+            <div class="match-breakdown-container" id="matchBreakdownContainer" style="display: none;">
+                <h3>Match Breakdown</h3>
+                <div id="matchBreakdownTable"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="app.js"></script>
+</body>
+</html>
