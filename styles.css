@@ -241,6 +241,22 @@ select:focus {
     flex-wrap: wrap;
 }
 
+.filters input[type="text"] {
+    padding: 8px 16px;
+    background: #0f172a;
+    color: var(--text);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    font-size: 1em;
+    min-width: 250px;
+    transition: border-color 0.3s;
+}
+
+.filters input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
 .filters label {
     display: flex;
     align-items: center;

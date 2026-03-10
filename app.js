@@ -35,6 +35,7 @@ const elements = {
     matchCount: document.getElementById('matchCount'),
     videoCount: document.getElementById('videoCount'),
     filters: document.getElementById('filters'),
+    teamSearch: document.getElementById('teamSearch'),
     videoFilter: document.getElementById('videoFilter'),
     matchType: document.getElementById('matchType'),
     matchList: document.getElementById('matchList'),
@@ -60,6 +61,7 @@ window.addEventListener('DOMContentLoaded', () => {
     elements.closePlayer.addEventListener('click', closeVideoPlayer);
     elements.prevVideo.addEventListener('click', () => navigateVideo(-1));
     elements.nextVideo.addEventListener('click', () => navigateVideo(1));
+    elements.teamSearch.addEventListener('input', filterMatches);
     elements.videoFilter.addEventListener('change', filterMatches);
     elements.matchType.addEventListener('change', filterMatches);
     
@@ -170,15 +172,19 @@ async function loadMatches() {
         // Sort by competition level order and match number
         const compLevelOrder = { 'qm': 1, 'ef': 2, 'qf': 3, 'sf': 4, 'f': 5 };
         allMatches = matches.sort((a, b) => {
-            // First sort by competition level
+            // First sort by competition level (quals, quarters, semis, finals)
             const aLevel = compLevelOrder[a.comp_level] || 99;
             const bLevel = compLevelOrder[b.comp_level] || 99;
             if (aLevel !== bLevel) return aLevel - bLevel;
             
-            // Within same level, sort by set number then match number
-            if (a.set_number !== b.set_number) {
-                return (a.set_number || 0) - (b.set_number || 0);
+            // For elimination matches, sort by set number first
+            if (a.comp_level !== 'qm' && a.comp_level !== 'f') {
+                if ((a.set_number || 0) !== (b.set_number || 0)) {
+                    return (a.set_number || 0) - (b.set_number || 0);
+                }
             }
+            
+            // Then sort by match number within the same level/set
             return a.match_number - b.match_number;
         });
         displayMatches();
@@ -196,10 +202,22 @@ async function loadMatches() {
 function displayMatches() {
     const videoOnly = elements.videoFilter.checked;
     const matchType = elements.matchType.value;
+    const teamSearch = elements.teamSearch.value.trim();
     
     filteredMatches = allMatches.filter(match => {
         if (videoOnly && (!match.videos || match.videos.length === 0)) return false;
         if (matchType !== 'all' && match.comp_level !== matchType) return false;
+        
+        // Filter by team number
+        if (teamSearch) {
+            const searchTeam = 'frc' + teamSearch;
+            const allTeams = [
+                ...(match.alliances?.red?.team_keys || []),
+                ...(match.alliances?.blue?.team_keys || [])
+            ];
+            if (!allTeams.includes(searchTeam)) return false;
+        }
+        
         return true;
     });
     
