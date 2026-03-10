@@ -3,7 +3,7 @@ const TBA_API_BASE = 'https://www.thebluealliance.com/api/v3';
 const STATBOTICS_API_BASE = 'https://api.statbotics.io/v3';
 
 // Default API key - replace with your TBA API key
-const DEFAULT_API_KEY = 'YOUR_API_KEY_HERE';
+const DEFAULT_API_KEY = '2trJHZUlMgArr2CnBiKhc5wxYsdv1aNpZOOcw6BBeZCNQPN7cGeVyiSYjLfmZId7 ';
 
 // Global state
 let allMatches = [];
