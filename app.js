@@ -417,16 +417,9 @@ function loadVideo(useNoCookie = false) {
                 console.log('Player ready');
                 // Unmute and play for mobile compatibility
                 event.target.unMute();
-                // Try multiple times to ensure playback starts on mobile
                 setTimeout(() => {
                     event.target.playVideo();
                 }, 100);
-                setTimeout(() => {
-                    event.target.playVideo();
-                }, 500);
-                setTimeout(() => {
-                    event.target.playVideo();
-                }, 1000);
             },
             'onError': (e) => handleVideoError(e.data, videoId),
             'onStateChange': function(event) {
