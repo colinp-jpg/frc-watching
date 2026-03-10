@@ -154,7 +154,7 @@ async function loadFMAEvents() {
             option.value = event.key;
             const date = new Date(event.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             const districtLabel = event.district ? `[${event.district.abbreviation.toUpperCase()}]` : '[Regional]';
-            const weekLabel = event.week !== null ? `Week ${event.week}` : '';
+            const weekLabel = event.week !== null ? `Week ${event.week + 1}` : '';
             option.textContent = `${event.name} ${districtLabel} (${date}) ${weekLabel}`;
             elements.eventSelect.appendChild(option);
         });
