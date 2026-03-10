@@ -299,10 +299,10 @@ function loadVideo(useNoCookie = false) {
                 id="videoIframe"
                 width="100%" 
                 height="675" 
-                src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0" 
+                src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&modestbranding=1&rel=0" 
                 frameborder="0" 
                 referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" 
                 allowfullscreen>
             </iframe>
         `;
@@ -340,12 +340,18 @@ function loadVideo(useNoCookie = false) {
         playerVars: {
             autoplay: 1,
             modestbranding: 1,
-            rel: 0
+            rel: 0,
+            playsinline: 1,
+            mute: 0
         },
         events: {
             'onReady': function(event) {
                 console.log('Player ready');
-                event.target.playVideo();
+                // Unmute and play for mobile compatibility
+                event.target.unMute();
+                setTimeout(() => {
+                    event.target.playVideo();
+                }, 100);
             },
             'onError': (e) => handleVideoError(e.data, videoId),
             'onStateChange': function(event) {
