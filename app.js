@@ -25,6 +25,8 @@ const CURRENT_ORIGIN = window.location.origin === 'null' || window.location.prot
 // DOM elements
 const elements = {
     yearSelect: document.getElementById('yearSelect'),
+    districtSelect: document.getElementById('districtSelect'),
+    weekSelect: document.getElementById('weekSelect'),
     loadEventsButton: document.getElementById('loadEvents'),
     eventSelectorGroup: document.getElementById('eventSelectorGroup'),
     eventSelect: document.getElementById('eventSelect'),
@@ -83,19 +85,19 @@ function onYouTubeIframeAPIReady() {
     console.log('YouTube API ready');
 }
 
-// Load FMA events for selected year
+// Load events for selected year with optional district and week filters
 async function loadFMAEvents() {
-    const key = elements.apiKeyInput.value.trim();
+    const key = apiKey || elements.apiKeyInput.value.trim();
     const year = elements.yearSelect.value;
+    const district = elements.districtSelect.value;
+    const week = elements.weekSelect.value;
     
     if (!key) {
-        showError('Please enter your API key first');
+        showError('API key not configured');
         return;
     }
     
-    localStorage.setItem('tba_api_key', key);
     localStorage.setItem('tba_selected_year', year);
-    apiKey = key;
     selectedYear = year;
     
     showLoading(true);
@@ -109,12 +111,40 @@ async function loadFMAEvents() {
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
         
         const allEvents = await response.json();
-        fmaEvents = allEvents.filter(event => 
-            event.district?.abbreviation === 'fma' || event.key.includes('fma')
-        ).sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
+        
+        // Filter events based on district and week
+        let filteredEvents = allEvents;
+        
+        if (district === 'regional') {
+            // Regional events have no district
+            filteredEvents = filteredEvents.filter(event => 
+                !event.district && event.event_type === 0
+            );
+        } else if (district) {
+            // Filter by specific district
+            filteredEvents = filteredEvents.filter(event => 
+                event.district?.abbreviation === district
+            );
+        }
+        
+        // Filter by week if specified
+        if (week !== '') {
+            filteredEvents = filteredEvents.filter(event => 
+                event.week !== null && event.week === parseInt(week)
+            );
+        }
+        
+        // Sort by start date
+        fmaEvents = filteredEvents.sort((a, b) => 
+            new Date(a.start_date) - new Date(b.start_date)
+        );
         
         if (fmaEvents.length === 0) {
-            showError(`No FMA events found for ${year}`);
+            const filterDesc = district === 'regional' ? 'regional events' : 
+                              district ? `${district.toUpperCase()} district events` : 'events';
+            const weekDesc = week !== '' ? ` in week ${week}` : '';
+            showError(`No ${filterDesc}${weekDesc} found for ${year}`);
+            elements.eventSelectorGroup.style.display = 'none';
             return;
         }
         
@@ -123,12 +153,16 @@ async function loadFMAEvents() {
             const option = document.createElement('option');
             option.value = event.key;
             const date = new Date(event.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            option.textContent = `${event.name} (${date}) - ${event.key}`;
+            const districtLabel = event.district ? `[${event.district.abbreviation.toUpperCase()}]` : '[Regional]';
+            const weekLabel = event.week !== null ? `Week ${event.week}` : '';
+            option.textContent = `${event.name} ${districtLabel} (${date}) ${weekLabel}`;
             elements.eventSelect.appendChild(option);
         });
         
         elements.eventSelectorGroup.style.display = 'block';
-        elements.eventCount.textContent = `${fmaEvents.length} FMA events found`;
+        const filterDesc = district === 'regional' ? 'regional events' : 
+                          district ? `${district.toUpperCase()} events` : 'events';
+        elements.eventCount.textContent = `${fmaEvents.length} ${filterDesc} found`;
     } catch (error) {
         showError(`Error loading events: ${error.message}`);
     } finally {

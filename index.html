@@ -44,12 +44,48 @@
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
                     </select>
-                    <button id="loadEvents" class="btn-secondary">Load FMA Events</button>
                 </div>
             </div>
             
+            <div class="input-group">
+                <label for="districtSelect">District (Optional):</label>
+                <select id="districtSelect">
+                    <option value="">All Districts & Regionals</option>
+                    <option value="regional">Regional Events</option>
+                    <option value="fim">FIRST In Michigan (FIM)</option>
+                    <option value="fma">FIRST Mid-Atlantic (FMA)</option>
+                    <option value="fnc">FIRST North Carolina (FNC)</option>
+                    <option value="ne">New England (NE)</option>
+                    <option value="ont">Ontario (ONT)</option>
+                    <option value="pch">Peachtree (PCH)</option>
+                    <option value="pnw">Pacific Northwest (PNW)</option>
+                    <option value="in">Indiana (IN)</option>
+                    <option value="tx">Texas (TX)</option>
+                    <option value="isr">Israel (ISR)</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="weekSelect">Week (Optional):</label>
+                <select id="weekSelect">
+                    <option value="">All Weeks</option>
+                    <option value="0">Week 0</option>
+                    <option value="1">Week 1</option>
+                    <option value="2">Week 2</option>
+                    <option value="3">Week 3</option>
+                    <option value="4">Week 4</option>
+                    <option value="5">Week 5</option>
+                    <option value="6">Week 6</option>
+                    <option value="7">Week 7</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <button id="loadEvents" class="btn-secondary">Load Events</button>
+            </div>
+            
             <div class="input-group" id="eventSelectorGroup" style="display: none;">
-                <label for="eventSelect">Select FMA Event:</label>
+                <label for="eventSelect">Select Event:</label>
                 <select id="eventSelect">
                     <option value="">-- Select an event --</option>
                 </select>
