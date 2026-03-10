@@ -167,22 +167,18 @@ async function loadMatches() {
         const matches = await response.json();
         if (!matches || matches.length === 0) throw new Error('No matches found');
         
-        // Sort by video upload date (most recent first), fallback to match number
+        // Sort by competition level order and match number
+        const compLevelOrder = { 'qm': 1, 'ef': 2, 'qf': 3, 'sf': 4, 'f': 5 };
         allMatches = matches.sort((a, b) => {
-            // Get the latest video upload time for each match
-            const aTime = a.videos && a.videos.length > 0 ? 
-                Math.max(...a.videos.map(v => new Date(v.uploaded_at || 0).getTime())) : 0;
-            const bTime = b.videos && b.videos.length > 0 ? 
-                Math.max(...b.videos.map(v => new Date(v.uploaded_at || 0).getTime())) : 0;
+            // First sort by competition level
+            const aLevel = compLevelOrder[a.comp_level] || 99;
+            const bLevel = compLevelOrder[b.comp_level] || 99;
+            if (aLevel !== bLevel) return aLevel - bLevel;
             
-            // If both have videos, sort by upload time (newest first)
-            if (aTime && bTime) return bTime - aTime;
-            
-            // Videos come before non-videos
-            if (aTime && !bTime) return -1;
-            if (!aTime && bTime) return 1;
-            
-            // If neither have videos, sort by match number
+            // Within same level, sort by set number then match number
+            if (a.set_number !== b.set_number) {
+                return (a.set_number || 0) - (b.set_number || 0);
+            }
             return a.match_number - b.match_number;
         });
         displayMatches();
