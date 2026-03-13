@@ -563,11 +563,16 @@ async function loadStatboticsData() {
     
     try {
         const matchKey = currentMatch.key;
+        console.log('Fetching Statbotics data for:', matchKey);
         
         // Fetch match data from Statbotics
         const matchResponse = await fetch(`${STATBOTICS_API_BASE}/match/${matchKey}`);
+        console.log('Statbotics response status:', matchResponse.status);
+        
         if (matchResponse.ok) {
             const matchData = await matchResponse.json();
+            console.log('Statbotics match data:', matchData);
+            
             displayStatboticsBreakdown(matchData);
             displayMatchBreakdownTable(matchData);
             breakdownContainer.style.display = 'block';
@@ -575,6 +580,7 @@ async function loadStatboticsData() {
             // Load team stats
             loadTeamStats(matchData);
         } else {
+            console.warn('Statbotics API returned non-OK status:', matchResponse.status);
             redStats.innerHTML = '<div class="loading-stats">Match statistics not available</div>';
             blueStats.innerHTML = '<div class="loading-stats">Match statistics not available</div>';
             breakdownContainer.style.display = 'none';
@@ -868,13 +874,28 @@ async function loadTeamStats(matchData) {
         const redTeams = matchData.alliances.red.team_keys;
         const blueTeams = matchData.alliances.blue.team_keys;
         
+        console.log('Loading team stats for year:', year);
+        console.log('Red teams:', redTeams);
+        console.log('Blue teams:', blueTeams);
+        
         // Fetch stats for all teams
-        const teamPromises = [...redTeams, ...blueTeams].map(teamKey => 
-            fetch(`${STATBOTICS_API_BASE}/team_year/${teamKey.replace('frc', '')}/${year}`)
-                .then(res => res.ok ? res.json() : null)
-        );
+        const teamPromises = [...redTeams, ...blueTeams].map(teamKey => {
+            const teamNum = teamKey.replace('frc', '');
+            const url = `${STATBOTICS_API_BASE}/team_year/${teamNum}/${year}`;
+            console.log('Fetching:', url);
+            return fetch(url)
+                .then(res => {
+                    console.log(`Team ${teamNum} response status:`, res.status);
+                    return res.ok ? res.json() : null;
+                })
+                .catch(err => {
+                    console.error(`Error fetching team ${teamNum}:`, err);
+                    return null;
+                });
+        });
         
         const teamStats = await Promise.all(teamPromises);
+        console.log('Team stats received:', teamStats);
         
         // Display stats
         let html = '';
