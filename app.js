@@ -880,7 +880,7 @@ async function loadTeamStats(matchData) {
         
         // Fetch stats for all teams
         const teamPromises = [...redTeams, ...blueTeams].map(teamKey => {
-            const teamNum = teamKey.replace('frc', '');
+            const teamNum = String(teamKey);
             const url = `${STATBOTICS_API_BASE}/team_year/${teamNum}/${year}`;
             console.log('Fetching:', url);
             return fetch(url)
@@ -921,7 +921,7 @@ async function loadTeamStats(matchData) {
 }
 
 function formatTeamStatBox(teamKey, stats, allianceClass) {
-    const teamNum = teamKey.replace('frc', '');
+    const teamNum = String(teamKey);
     
     if (!stats) {
         return `
