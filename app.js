@@ -864,7 +864,7 @@ async function loadTeamStats(matchData) {
     teamStatsContainer.style.display = 'block';
     
     try {
-        const year = currentMatch.key.split('_')[0];
+        const year = currentMatch.key.substring(0, 4);
         const redTeams = matchData.alliances.red.team_keys;
         const blueTeams = matchData.alliances.blue.team_keys;
         
