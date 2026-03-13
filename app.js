@@ -571,10 +571,14 @@ async function loadStatboticsData() {
             displayStatboticsBreakdown(matchData);
             displayMatchBreakdownTable(matchData);
             breakdownContainer.style.display = 'block';
+            
+            // Load team stats
+            loadTeamStats(matchData);
         } else {
             redStats.innerHTML = '<div class="loading-stats">Match statistics not available</div>';
             blueStats.innerHTML = '<div class="loading-stats">Match statistics not available</div>';
             breakdownContainer.style.display = 'none';
+            document.getElementById('teamStatsContainer').style.display = 'none';
         }
         
     } catch (error) {
@@ -582,6 +586,7 @@ async function loadStatboticsData() {
         redStats.innerHTML = '<div class="loading-stats">Statistics unavailable</div>';
         blueStats.innerHTML = '<div class="loading-stats">Statistics unavailable</div>';
         breakdownContainer.style.display = 'none';
+        document.getElementById('teamStatsContainer').style.display = 'none';
     }
 }
 
@@ -849,6 +854,85 @@ function displayMatchBreakdownTable(matchData) {
     `;
     
     breakdownTable.innerHTML = html;
+}
+
+async function loadTeamStats(matchData) {
+    const teamStatsContainer = document.getElementById('teamStatsContainer');
+    const teamStatsContent = document.getElementById('teamStatsContent');
+    
+    teamStatsContent.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Loading team stats...</div>';
+    teamStatsContainer.style.display = 'block';
+    
+    try {
+        const year = currentMatch.key.split('_')[0];
+        const redTeams = matchData.alliances.red.team_keys;
+        const blueTeams = matchData.alliances.blue.team_keys;
+        
+        // Fetch stats for all teams
+        const teamPromises = [...redTeams, ...blueTeams].map(teamKey => 
+            fetch(`${STATBOTICS_API_BASE}/team_year/${teamKey.replace('frc', '')}/${year}`)
+                .then(res => res.ok ? res.json() : null)
+        );
+        
+        const teamStats = await Promise.all(teamPromises);
+        
+        // Display stats
+        let html = '';
+        
+        // Red alliance teams
+        redTeams.forEach((teamKey, index) => {
+            const stats = teamStats[index];
+            html += formatTeamStatBox(teamKey, stats, 'red-team');
+        });
+        
+        // Blue alliance teams
+        blueTeams.forEach((teamKey, index) => {
+            const stats = teamStats[redTeams.length + index];
+            html += formatTeamStatBox(teamKey, stats, 'blue-team');
+        });
+        
+        teamStatsContent.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error loading team stats:', error);
+        teamStatsContent.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Team stats unavailable</div>';
+    }
+}
+
+function formatTeamStatBox(teamKey, stats, allianceClass) {
+    const teamNum = teamKey.replace('frc', '');
+    
+    if (!stats) {
+        return `
+            <div class="team-stat-box ${allianceClass}">
+                <h4>Team ${teamNum}</h4>
+                <div style="color: var(--text-muted); text-align: center; padding: 10px 0;">Stats not available</div>
+            </div>
+        `;
+    }
+    
+    const epa = stats.epa?.breakdown?.total_points?.mean || 0;
+    const record = `${stats.record?.season?.wins || 0}-${stats.record?.season?.losses || 0}-${stats.record?.season?.ties || 0}`;
+    const rank = stats.epa?.ranks?.total_points?.rank || 'N/A';
+    const totalTeams = stats.epa?.ranks?.total_points?.team_count || 'N/A';
+    
+    return `
+        <div class="team-stat-box ${allianceClass}">
+            <h4>Team ${teamNum}</h4>
+            <div class="team-stat-item">
+                <span class="label">EPA</span>
+                <span class="value">${epa.toFixed(1)}</span>
+            </div>
+            <div class="team-stat-item">
+                <span class="label">Record</span>
+                <span class="value">${record}</span>
+            </div>
+            <div class="team-stat-item">
+                <span class="label">Rank</span>
+                <span class="value">${rank} / ${totalTeams}</span>
+            </div>
+        </div>
+    `;
 }
 
 function displayPrediction(prediction) {

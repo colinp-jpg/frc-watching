@@ -904,6 +904,71 @@ select:focus {
     margin-bottom: 15px;
 }
 
+.team-stats-container {
+    display: none;
+    padding: 18px;
+    max-width: 1400px;
+    margin: 15px auto 0;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.team-stats-container h3 {
+    text-align: center;
+    color: var(--text);
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+#teamStatsContent {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.team-stat-box {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid var(--primary);
+}
+
+.team-stat-box.red-team {
+    border-left-color: var(--red-alliance);
+}
+
+.team-stat-box.blue-team {
+    border-left-color: var(--blue-alliance);
+}
+
+.team-stat-box h4 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: var(--text);
+}
+
+.team-stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.9em;
+    border-bottom: 1px solid var(--border);
+}
+
+.team-stat-item:last-child {
+    border-bottom: none;
+}
+
+.team-stat-item .label {
+    color: var(--text-muted);
+}
+
+.team-stat-item .value {
+    font-weight: 600;
+    color: var(--text);
+}
+
 .breakdown-table-full {
     width: 100%;
     border-collapse: collapse;
