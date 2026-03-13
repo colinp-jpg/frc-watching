@@ -326,6 +326,9 @@ function openVideoPlayer(match) {
     // Lock screen orientation to landscape on mobile
     lockOrientation();
     
+    // Request fullscreen on mobile devices
+    requestFullscreen();
+    
     loadVideo(false);
     displayMatchDetails();
 }
@@ -333,6 +336,9 @@ function openVideoPlayer(match) {
 function closeVideoPlayer() {
     elements.videoPlayer.style.display = 'none';
     document.body.style.overflow = 'auto';
+    
+    // Exit fullscreen if active
+    exitFullscreen();
     
     // Unlock screen orientation
     unlockOrientation();
