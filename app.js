@@ -579,7 +579,7 @@ function displayStatboticsBreakdown(matchData) {
     const redPred = Math.round(pred.red_score || 0);
     const bluePred = Math.round(pred.blue_score || 0);
     const redWinProb = ((pred.red_win_prob || 0) * 100).toFixed(0);
-    const blueWinProb = ((pred.blue_win_prob || 0) * 100).toFixed(0);
+    const blueWinProb = pred.blue_win_prob ? ((pred.blue_win_prob) * 100).toFixed(0) : (100 - parseFloat(redWinProb)).toFixed(0);
     
     // Get actual results from Statbotics
     const result = matchData.result || {};
@@ -837,7 +837,7 @@ function displayPrediction(prediction) {
     }
     
     const redWinProb = ((prediction.red_win_prob || 0) * 100).toFixed(1);
-    const blueWinProb = ((prediction.blue_win_prob || 0) * 100).toFixed(1);
+    const blueWinProb = prediction.blue_win_prob ? ((prediction.blue_win_prob) * 100).toFixed(1) : (100 - parseFloat(redWinProb)).toFixed(1);
     const redScore = (prediction.red_score || prediction.red_score === 0) ? prediction.red_score.toFixed(0) : '?';
     const blueScore = (prediction.blue_score || prediction.blue_score === 0) ? prediction.blue_score.toFixed(0) : '?';
     
