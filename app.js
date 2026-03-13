@@ -76,6 +76,18 @@ window.addEventListener('DOMContentLoaded', () => {
         closeFromRotateBtn.addEventListener('click', closeVideoPlayer);
     }
     
+    // Close video when user exits fullscreen (e.g., pressing back button on Android)
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement && elements.videoPlayer.style.display === 'block') {
+            closeVideoPlayer();
+        }
+    });
+    document.addEventListener('webkitfullscreenchange', () => {
+        if (!document.webkitFullscreenElement && elements.videoPlayer.style.display === 'block') {
+            closeVideoPlayer();
+        }
+    });
+    
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (elements.videoPlayer.style.display === 'block') {
@@ -961,6 +973,52 @@ function unlockOrientation() {
         }
     } catch (err) {
         console.log('Screen orientation unlock failed:', err);
+    }
+}
+
+// Fullscreen helpers for mobile devices
+function requestFullscreen() {
+    const videoPlayer = elements.videoPlayer;
+    
+    // Only auto-fullscreen on mobile devices
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth <= 768;
+    
+    if (!isMobile) return;
+    
+    try {
+        if (videoPlayer.requestFullscreen) {
+            videoPlayer.requestFullscreen().catch(err => {
+                console.log('Fullscreen request failed:', err);
+            });
+        } else if (videoPlayer.webkitRequestFullscreen) {
+            videoPlayer.webkitRequestFullscreen();
+        } else if (videoPlayer.mozRequestFullScreen) {
+            videoPlayer.mozRequestFullScreen();
+        } else if (videoPlayer.msRequestFullscreen) {
+            videoPlayer.msRequestFullscreen();
+        }
+    } catch (err) {
+        console.log('Fullscreen not supported:', err);
+    }
+}
+
+function exitFullscreen() {
+    try {
+        if (document.fullscreenElement || document.webkitFullscreenElement || 
+            document.mozFullScreenElement || document.msFullscreenElement) {
+            
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    } catch (err) {
+        console.log('Exit fullscreen failed:', err);
     }
 }
 
