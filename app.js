@@ -70,6 +70,12 @@ window.addEventListener('DOMContentLoaded', () => {
     elements.videoFilter.addEventListener('change', filterMatches);
     elements.matchType.addEventListener('change', filterMatches);
     
+    // Close video from rotate message (mobile portrait)
+    const closeFromRotateBtn = document.getElementById('closeFromRotate');
+    if (closeFromRotateBtn) {
+        closeFromRotateBtn.addEventListener('click', closeVideoPlayer);
+    }
+    
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (elements.videoPlayer.style.display === 'block') {

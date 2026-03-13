@@ -1381,6 +1381,11 @@ select:focus {
     padding: 20px;
 }
 
+.rotate-message button {
+    width: auto;
+    max-width: 250px;
+}
+
 .rotate-message svg {
     width: 80px;
     height: 80px;
@@ -1410,8 +1415,93 @@ select:focus {
         display: flex !important;
     }
     
+    .video-player .video-header,
     .video-player .player-layout,
     .video-player .video-controls {
+        display: none !important;
+    }
+}
+
+/* Fullscreen video in landscape mode on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .video-player {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9999;
+    }
+    
+    .video-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10001;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        padding: 8px !important;
+    }
+    
+    .video-header h2 {
+        font-size: 0.9em !important;
+    }
+    
+    .btn-close {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 1em !important;
+    }
+    
+    .player-layout {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 50px;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        padding: 0 !important;
+    }
+    
+    .center-video {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .video-container {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        aspect-ratio: auto !important;
+    }
+    
+    .video-controls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 10001;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        margin: 0 !important;
+        padding: 10px !important;
+        border-radius: 0 !important;
+    }
+    
+    .btn-nav {
+        padding: 8px 16px !important;
+        font-size: 0.9em !important;
+    }
+    
+    .alliance-stats {
         display: none !important;
     }
 }
@@ -1423,56 +1513,5 @@ select:focus {
     
     .match-list {
         grid-template-columns: 1fr;
-    }
-    
-    .video-controls {
-        flex-wrap: wrap;
-    }
-    
-    /* Hide sidebars and breakdown on mobile */
-    .alliance-stats,
-    .match-breakdown-container {
-        display: none !important;
-    }
-    
-    /* Full screen video player on mobile */
-    .player-layout {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 0;
-    }
-    
-    .video-player {
-        padding: 0;
-    }
-    
-    .video-header {
-        padding: 10px;
-    }
-    
-    .video-header h2 {
-        font-size: 1em;
-    }
-    
-    .video-container {
-        max-height: 100vh;
-        border-radius: 0;
-    }
-    
-    .btn-close {
-        width: 36px;
-        height: 36px;
-        font-size: 1.2em;
-    }
-    
-    .video-controls {
-        margin: 5px;
-        padding: 8px;
-    }
-    
-    .btn-nav {
-        padding: 10px 20px;
-        font-size: 0.95em;
     }
 }
